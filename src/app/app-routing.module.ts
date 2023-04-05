@@ -8,8 +8,20 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'tipo-servicos-listagem',
     pathMatch: 'full'
+  },
+  {
+    path: 'cliente-add-edit',
+    loadChildren: () => import('./cliente/cliente-add-edit/cliente-add-edit.module').then( m => m.ClienteAddEditPageModule)
+  },
+  {
+    path: 'tipo-servicos-listagem',
+    loadChildren: () => import('./pages/tipo-servicos/tipo-servicos-listagem/tipo-servicos-listagem.module').then( m => m.TipoServicosListagemPageModule)
+  },
+  {
+    path: 'tipo-servicos-add-edit/:id',
+    loadChildren: () => import('./pages/tipo-servicos/tipo-servicos-add-edit/tipo-servicos-add-edit.module').then( m => m.TipoServicosAddEditPageModule)
   },
 ];
 
