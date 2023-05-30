@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { CapacitorSQLite, SQLiteConnection } from '@capacitor-community/sqlite';
 import { SQLiteDBConnection } from '@capacitor-community/sqlite/dist/esm/definitions';
 import { Capacitor } from "@capacitor/core";
-import { createSchema } from "./database.statements";
+import { createClientesTable, createOrdensDeServicoTable } from "./database.statements";
 import { promises } from "dns";
 import { Guid } from "guid-typescript";
 
@@ -49,28 +49,52 @@ export class DatabaseService {
 
     private async createSchema(db: SQLiteDBConnection): Promise<void> {
         await db.open();
-        let createSchemma: any = await db.execute(createSchema);
+        let createClienteSchemma: any = await db.execute(createClientesTable);
+        let createOSSchema: any = await db.execute(createOrdensDeServicoTable);
         await this.populateDatabase(db);
         await db.close();
-        if (createSchemma.changes.changes < 0) {
-            return Promise.reject(new Error("Erro na criação das tabelas"));
-        }
-    return Promise.resolve();    
+        console.log('Fechou conexão');
+        return Promise.resolve();    
 
     }
 
     private async populateDatabase (db: SQLiteDBConnection): Promise<void> {
+        const clienteID = Guid.create().toString();
+        
+        await this.populateClientes(db, clienteID);
+        await this.populateOrdensDeServico(db, clienteID);
+
+        return Promise.resolve();
+    }
+
+    private async populateOrdensDeServico(db: SQLiteDBConnection, clienteID:String):
+    Promise<void> {
         let returnQuery = await db.query("select COUNT(ordemdeservicoid) as qtdeOS from ordensdeservico;");
         if (returnQuery.values![0].qtdeOS === 0) {
-            let sqlcmd: string = "INSERT INTO ordensdeservico (ordemdeservicoid, clienteid, veiculo, dataehoraentrada, dataehoratermino) VALUES (?,?,?,?,?)";
-            let values: Array<any> = [Guid.create().toString(), Guid.create().toString(), 'ABC-1235', Date.now(), null];
+            let sqlcmd: string = "INSERT INTO ordensdeservico (ordemdeservicoid, clienteid, ceiculo, dataehoraentrada, dataehoratermino) VALUES (?,?,?,?,?)";
+            let values : Array<any> = [Guid.create().toString(), clienteID, 'ABC-1235', Date.now(), null];
             let returnInsert = await db.run(sqlcmd, values);
             if (returnInsert.changes ?? -1 < 0) {
                 return Promise.reject(new Error("Erro na inserção da ordem de serviço"));
+                
             }
         }
         return Promise.resolve();
     }
+
+    private async populateClientes(db: SQLiteDBConnection, clienteID: String): Promise <void> {
+        let returnQuery = await db.query("select COUNT(clienteid) as qtdeClientes from clientes;");
+        if (returnQuery.values![0].qtdeClientes === 0){
+            let sqlcmd: string = "INSERT INTO clientes (clienteid, nome, email, telefone, renda) VALUES (?,?,?,?,?)";
+            let values: Array<any> = [clienteID, 'Rafael', 'rafael@gmail.com', '999999999', 123];
+            let returnInsert = await db.run(sqlcmd, values);
+            if (returnInsert.changes ?? -1 < 0){
+                return Promise.reject(new Error("Erro na inserção do cliente"));
+            }
+         }
+         return Promise.resolve();
+    }
+    
         
 
 }
