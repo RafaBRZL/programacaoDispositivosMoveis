@@ -31,6 +31,19 @@ const routes: Routes = [
     path: 'pecas-listagem',
     loadChildren: () => import('./pages/pecas/pecas-listagem/pecas-listagem.module').then( m => m.PecasListagemPageModule)
   },
+  {
+    path: 'ordensdeservico-listagem',
+    loadChildren: () => import('./pages/ordensdeservico/ordensdeservico-listagem/ordensdeservico-listagem.module').then( m => m.OrdensdeservicoListagemPageModule)
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./ionic-generate-page-pages/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+  },
+  {
+    path: 'ordensdeservico-add-edit',
+    loadChildren: () => import('./pages/ordensdeservico/ordensdeservico-add-edit/ordensdeservico-add-edit.module').then( m => m.OrdensdeservicoAddEditPageModule)
+  },
+  
 ];
 
 @NgModule({
