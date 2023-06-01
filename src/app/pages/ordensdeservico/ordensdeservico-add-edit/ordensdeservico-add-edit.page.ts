@@ -6,6 +6,8 @@ import { Cliente } from 'src/app/models/cliente.model';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { DatePicker } from '@ionic-native/date-picker/ngx';
 import { Platform } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { OrdensDeServicoService } from 'src/app/services/ordensdeservico.service';
 
 @Component({
   templateUrl: './ordensDeServico-add-edit.page.html'
@@ -22,14 +24,27 @@ export class OrdensDeServicoAddEditPage implements OnInit {
     private clientesService: ClientesService,
     private datePicker: DatePicker,
     private platform: Platform,
+    private route: ActivatedRoute,
+    private ordensDeServicoService: OrdensDeServicoService,
   ) { }
 
   async ngOnInit() {
   }
 
   async ionViewWillEnter() {
+    const id = this.route.snapshot.paramMap.get('id');
     const clientes = await this.clientesService.getAll();
     this.clientes = clientes;
+    if(id != null){
+      const isIdEmptyGUID = Guid.parse(id).isEmpty();
+      const isIdValidGUID = Guid.isGuid(id);
+      if (id && !isIdEmptyGUID && isIdValidGUID){
+        this.ordemDeServico = await this.ordensDeServicoService.getById(id);
+      } else {
+        this.ordemDeServico = {ordemdeservicoid: Guid.createEmpty().toString(),clienteid: Guid.createEmpty().toString(), veiculo: '', dataehoraentrada: new Date()};
+        this.modoDeEdicao = true;
+      }
+    }
     this.ordemDeServico = {
       ordemdeservicoid: Guid.createEmpty().toString(),
       clienteid: Guid.createEmpty().toString(),
@@ -45,7 +60,9 @@ export class OrdensDeServicoAddEditPage implements OnInit {
       horaentrada: [{ value: this.ordemDeServico.dataehoraentrada.toLocaleTimeString(), disabled: !this.modoDeEdicao }, Validators.required],
       dataehoraentrada: [this.ordemDeServico.dataehoraentrada]
     });
+    this.ordemDeServico = this.osForm.value;
   }
+
   selecionarDataEntrada() {
     if (!this.modoDeEdicao) {
       return;

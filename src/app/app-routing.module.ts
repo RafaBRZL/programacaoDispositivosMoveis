@@ -33,11 +33,15 @@ const routes: Routes = [
   },
   {
     path: 'ordensDeServico-listagem',
-    loadChildren: () => import('./pages/ordensDeServico/ordensDeServico-listagem/ordensDeServico-listagem.module').then( m => m.OrdensDeServicoListagemPageModule)
+    loadChildren: () => import('./pages/ordensdeservico/ordensdeservico-listagem/ordensdeservico-listagem.module').then( m => m.OrdensdeservicoListagemPageModule)
   },
   {
     path: 'dashboard',
     loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+  },
+  {
+    path: 'ordensdeservico-add-edit/:id',
+    loadChildren: () => import('./pages/ordensdeservico/ordensdeservico-add-edit/ordensdeservico-add-edit.module').then( m => m.OrdensDeServicoAddEditPageModule)
   },
 
 ];
