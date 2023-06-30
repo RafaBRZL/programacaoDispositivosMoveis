@@ -18,17 +18,22 @@ export class AppComponent {
    { 
     title: 'Tipos de servicos',
     url: '/tipodeservico',
-    icon: '/assets/img/icon_tiposservicos.png'
+    icon: '/assets/imgs/icon_tiposservicos.png'
    },
    {
     title: 'Pecas',
     url: '/pecas',
-    icon: 'assets/img/tab_pecas.png'
+    icon: 'assets/imgs/tab_pecas.png'
    },
    {
     title: 'Atendimentos',
     url: '/ordensdeservicos-listagem',
-    icon: 'assets/img/icon_atendimento.png'
+    icon: 'assets/imgs/icon_atendimentos.png'
+   },
+   {
+    title: 'Clientes',
+    url: '/clientes-listagem',
+    icon: 'assets/imgs/icon_clientes.png'
    }
   ];
   private initPlugin!: boolean;

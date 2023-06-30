@@ -43,6 +43,18 @@ const routes: Routes = [
     path: 'ordensdeservico-add-edit/:id',
     loadChildren: () => import('./pages/ordensdeservico/ordensdeservico-add-edit/ordensdeservico-add-edit.module').then( m => m.OrdensDeServicoAddEditPageModule)
   },
+  {
+    path: 'clientes-add-edit/:id',
+    loadChildren: () => import('./pages/clientes/clientes-add-edit/clientes-add-edit.module').then( m => m.ClientesAddEditPageModule)
+  },
+  {
+    path: 'clientes-listagem',
+    loadChildren: () => import('./pages/clientes/clientes-listagem/clientes-listagem.module').then( m => m.ClientesListagemPageModule)
+  },
+  {
+    path: 'clientes-search',
+    loadChildren: () => import('./pages/clientes/clientes-search/clientes-search.module').then( m => m.ClientesSearchPageModule)
+  },
 
 ];
 

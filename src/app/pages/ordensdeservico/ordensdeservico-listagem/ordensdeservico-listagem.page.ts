@@ -15,6 +15,8 @@ export class OrdensdeservicoListagemPage implements OnInit {
   public ordensDeServico: OrdemDeServico[] = [];
 
   @ViewChild('slidingList') slidingList!: IonList;
+  alertService: any;
+  ordemdeservico: any;
 
   constructor(
     private ordensdeservicoService: OrdensDeServicoService,
@@ -25,8 +27,17 @@ export class OrdensdeservicoListagemPage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    const oss = await this.ordensdeservicoService.getAll();
-    this.ordensDeServico = oss;
+    
+    this.ordensDeServico = await this.ordensdeservicoService.getAll();
   }
+
+  async removerAtendimento(ordensdeservico: OrdemDeServico) {
+    await this.ordensdeservicoService.removeById(this.ordemdeservico.ordemdeservicoid).then(async () => {
+      this.ordensDeServico = await this.ordensdeservicoService.getAll();
+      this.toastService.presentToast('Ordem de Servico removida', 3000, 'top');
+      await this.slidingList.closeSlidingItems();
+    })
+    .catch(async (e) => await this.alertService.presentAlert('Falha', 'Remoção não foi executada', e, ['ok']));
+  } 
 
 }
